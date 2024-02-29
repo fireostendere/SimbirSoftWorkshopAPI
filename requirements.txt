@@ -1,0 +1,6 @@
+pytest == 8.0.1
+allure-pytest == 2.13.2
+faker == 23.2.1
+pytest-xdist == 3.5.0
+requests == 2.31.0
+pydantic == 2.6.3
