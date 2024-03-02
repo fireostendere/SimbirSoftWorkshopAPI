@@ -4,7 +4,7 @@ import pytest
 from _pytest.config.argparsing import Parser
 
 from data.model import EntitiesResponse
-from lib.test_service_lib import get_all, create_entity, TestServiceAPI, delete_entity_by_id
+from lib.test_service_lib import TestServiceLib, TestServiceAPI
 from data.data_generator import generate_data
 
 
@@ -22,38 +22,43 @@ def do_cleanup(request):
 
 
 @pytest.fixture(scope='module')
-def test_service_api(request, do_cleanup):
+def test_service_api(request):
     base_url = request.config.getoption("--base_url")
-    api = TestServiceAPI(base_url)
+    return TestServiceAPI(base_url)
+
+
+@pytest.fixture(scope='module')
+def test_service_lib(request, test_service_api, do_cleanup):
+    lib = TestServiceLib(test_service_api)
 
     if do_cleanup:
         # Получить количество сущностей перед тестом
-        initial_count = len(get_all(api).entity)
-        yield api
+        initial_count = len(lib.get_all().entity)
+        yield lib
         # Восстановить исходное количество сущностей после теста
-        final_count = len(get_all(api).entity)
+        final_count = len(lib.get_all().entity)
         difference = final_count - initial_count
         if difference > 0:
             # Если были созданы новые сущности, удалить их
-            entities = get_all(api).entity
+            entities = lib.get_all().entity
             for entity in entities[:difference]:
-                delete_entity_by_id(api, str(entity.id))
+                lib.delete_entity_by_id(str(entity.id))
         elif difference < 0:
             # Если были удалены сущности, создать их
             for _ in range(abs(difference)):
                 user_data = generate_data()
-                create_entity(api, user_data)
+                lib.create_entity(user_data)
     else:
-        yield api
+        yield lib
 
 
 @pytest.fixture(scope='module')
-def ensure_entities_exist(test_service_api):
-    response = get_all(test_service_api)
+def ensure_entities_exist(test_service_lib):
+    response = test_service_lib.get_all()
     entities = response.entity if isinstance(response, EntitiesResponse) else None
     if not entities:
         user_data = generate_data()
-        create_entity(test_service_api, user_data)
+        test_service_lib.create_entity(user_data)
     yield
 
 

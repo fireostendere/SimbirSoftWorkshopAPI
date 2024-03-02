@@ -1,6 +1,3 @@
-Ваш обновленный файл `.gitignore` без папки `lib` будет выглядеть следующим образом:
-
-```gitignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
