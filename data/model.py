@@ -1,40 +1,31 @@
-# data/model.py
-
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class AdditionRequest(BaseModel):
-    additional_info: str = Field(..., json_schema_extra={'example': "Дополнительные сведения"})
-    additional_number: int = Field(..., json_schema_extra={'example': 123})
-
-
-class EntityAdd(BaseModel):
-    addition: AdditionRequest
-    important_numbers: List[int] = Field(..., json_schema_extra={'example': [42, 87, 15]})
-    title: str = Field(..., json_schema_extra={'example': "Заголовок сущности"})
-    verified: bool = Field(..., json_schema_extra={'example': True})
+    additional_info: str
+    additional_number: int
 
 
 class EntityRequest(BaseModel):
     addition: AdditionRequest
-    important_numbers: List[int] = Field(..., json_schema_extra={'example': [42, 87, 15]})
-    title: str = Field(..., json_schema_extra={'example': "Заголовок сущности"})
-    verified: bool = Field(..., json_schema_extra={'example': True})
+    important_numbers: List[int]
+    title: str
+    verified: bool
 
 
 class AdditionResponse(BaseModel):
-    additional_info: str = Field(..., json_schema_extra={'example': "Дополнительные сведения"})
-    additional_number: int = Field(..., json_schema_extra={'example': 123})
-    id: int = Field(..., json_schema_extra={'example': 1})
+    additional_info: str
+    additional_number: int
+    id: int
 
 
 class EntityResponse(BaseModel):
     addition: AdditionResponse
-    id: int = Field(..., json_schema_extra={'example': 1})
-    important_numbers: List[int] = Field(..., json_schema_extra={'example': [42, 87, 15]})
-    title: str = Field(..., json_schema_extra={'example': "Заголовок сущности"})
-    verified: bool = Field(..., json_schema_extra={'example': True})
+    id: int
+    important_numbers: List[int]
+    title: str
+    verified: bool
 
 
 class EntitiesResponse(BaseModel):

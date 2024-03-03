@@ -5,7 +5,7 @@ from _pytest.config.argparsing import Parser
 
 from data.model import EntitiesResponse
 from lib.test_service_lib import TestServiceLib, TestServiceAPI
-from data.data_generator import generate_data
+from data.data_generator import generate_entity_creation_data
 
 
 def pytest_addoption(parser: Parser) -> None:
@@ -46,7 +46,7 @@ def test_service_lib(request, test_service_api, do_cleanup):
         elif difference < 0:
             # Если были удалены сущности, создать их
             for _ in range(abs(difference)):
-                user_data = generate_data()
+                user_data = generate_entity_creation_data()
                 lib.create_entity(user_data)
     else:
         yield lib
@@ -57,7 +57,7 @@ def ensure_entities_exist(test_service_lib):
     response = test_service_lib.get_all()
     entities = response.entity if isinstance(response, EntitiesResponse) else None
     if not entities:
-        user_data = generate_data()
+        user_data = generate_entity_creation_data()
         test_service_lib.create_entity(user_data)
     yield
 

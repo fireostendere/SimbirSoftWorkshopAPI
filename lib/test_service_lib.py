@@ -1,5 +1,5 @@
 from requests import Response
-from data.model import EntitiesResponse, EntityAdd, EntityResponse
+from data.model import EntitiesResponse, EntityRequest, EntityResponse
 from .modules.test_service_module import TestServiceAPI
 
 
@@ -26,18 +26,16 @@ class TestServiceLib:
         entity_data = response.json()
         return EntityResponse(**entity_data)
 
-    def create_entity(self, user_data: EntityAdd) -> EntityResponse:
+    def create_entity(self, user_data: EntityRequest) -> EntityResponse:
         response: Response = self.user_session.create_entity(user_data=user_data)
         if response.status_code != 200:
-            print(response.content)  # print out the response content
             raise ValueError('Не удалось создать сущность')
         entity_id = response.text
         response: Response = self.user_session.get_entity_by_id(entity_id)
         entity_data = response.json()
         return EntityResponse(**entity_data)
 
-    def patch_entity_by_id(self, entity_id: str, user_data: EntityAdd) -> None:
+    def patch_entity_by_id(self, entity_id: str, user_data: EntityRequest) -> None:
         response: Response = self.user_session.patch_entity_by_id(entity_id, user_data=user_data)
         if response.status_code != 204:
-            print(response.content)  # print out the response content
             raise ValueError('Не удалось изменить сущность')
