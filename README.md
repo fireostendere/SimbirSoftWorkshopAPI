@@ -51,4 +51,4 @@ pytest --alluredir=./allure_results
 pytest --docleanup
 ```
 
-**В папке Jenkins_proof содержатся скриншоты работы CD/CI
+*В папке Jenkins_proof содержатся скриншоты работы CD/CI
